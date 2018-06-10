@@ -1,7 +1,10 @@
+*{
+    font-family: Verdana, "DejaVu Sans", "Bitstream Vera Sans", Geneva, sans-serif;
+}
 
 #login{
-    margin-top: 15%;
-    background: #fff5f5;
+    margin-top: 10%;
+    background: #f2ffea;
     box-shadow: 7px 15px 30px 2px #ddcfcf;
 }
 

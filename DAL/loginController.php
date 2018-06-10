@@ -1,10 +1,11 @@
 <?php
     
+    //v�rification du post et direction vers la bonne fonction
     if(isset($_POST['mail']) && isset($_POST['password']) && isset($_POST['password2']) && isset($_POST['pseudo'])){
         if($_POST['password'] != $_POST['password2']){
             header('Location: ../index.php');
         }else{
-            sessionUser();
+            registerPost();
         }
     }else if( isset($_POST['pseudoLog']) && isset($_POST['passwordLog'])){
         $pseudoLog = $_POST['pseudoLog'];
@@ -16,21 +17,21 @@
         //header('Location: ../index.php');
     }
     
-    //fontion pour récupérer le post et mettre en session
-    function sessionUser(){
+    //fonction qui r�cup�re les infos du user
+    function registerPost(){
         $pseudo=$_POST['pseudo'];
         $mail=$_POST['mail']; 
         $password= $_POST['password'];
         $passwordHash=  hashMDP($password);
         
+        insertUser($pseudo, $mail, $passwordHash);
+    }
+    
+    //fontion pour récupérer le post et mettre en session
+    function sessionUser($pseudo){
         session_start();
         $_SESSION['pseudo']=$pseudo;
-        $_SESSION['password']=$passwordHash;
-        $_SESSION['mail']=$mail;
-        
-        insertClient($pseudo, $mail, $passwordHash);
     }
-
     
     //fonction pour hasher le mot de passe
     function hashMDP($password){
@@ -41,7 +42,7 @@
     //access to BDD
     function connectDB(){
         try{
-           $bdd = new PDO('mysql:host=localhost;dbname=exoOC;charset=utf8', 'root', '');
+           $bdd = new PDO('mysql:host=localhost;dbname=blog;charset=utf8', 'root', '');
         }catch(Exception $e){  
             die('Erreur : '.$e->getMessage());
         }
@@ -49,16 +50,17 @@
     }
     
     //insert new client
-    function insertClient($pseudo,$mail,$password){  
+    function insertUser($pseudo,$mail,$password){  
         $bdd=connectDB();
         
         try{
-            $req = $bdd->prepare('INSERT INTO client (pseudo,email, password) VALUES(?, ?, ?)');
+            $req = $bdd->prepare("INSERT INTO user (pseudo,email, password, img) VALUES(?, ?,?,'img/chat3.jpg')");
             $req->execute(array($pseudo, $mail, $password));
         }catch(Exception $e){
             die('Erreur : '.$e->getMessage());
         }
-        header('Location: ../login.php');
+        
+        header('Location: ../index.php');
     }
     
     //fonction pour vérifier l'accès de l'utilisateur
@@ -67,13 +69,12 @@
         $passwordBDD= selectByAKA($pseudoLog);
         
         if(password_verify($passwordLog, $passwordBDD['password'])){
-            session_start();
-            $_SESSION['pseudo']=$pseudoLog;
-            header('Location: ../accueil.php');
+            sessionUser($pseudoLog);
+            header('Location: ../home.php');
         }else{
             session_start();
             $_SESSION['pseudo']='Ce pseudo n\'existe pas';
-            header('Location: ../login.php');
+            header('Location: ../index.php');
         }
     }
     
@@ -96,7 +97,7 @@
     function selectByAKA($pseudo){
         $bdd=connectDB();
 
-        $passwordBDD = $bdd->query("SELECT password, pseudo, email FROM client WHERE pseudo='$pseudo'");
+        $passwordBDD = $bdd->query("SELECT password, pseudo, email FROM user WHERE pseudo='$pseudo'");
         while($donnee = $passwordBDD->fetch()){
             $result = $donnee;
         }
