@@ -1,7 +1,7 @@
 <?php
     session_start();
     require 'templates/head.html';
-    require 'DAL/controller.php';
+    require 'DAL/profilController.php';
 ?>
 
 <h1 style="text-align: center">Les derniers connectés</h1>
@@ -14,14 +14,14 @@
                         <img class="d-block w-100" src="<?php if(isset($_SESSION['directory'])){
                             echo 'fichier/'.$_SESSION['directory'];
                         }else{
-                           echo 'img/chat1.jpg'; 
+                           echo 'img-blog/chat1.jpg'; 
                         }?>" alt="First slide">
                     </div>
                     <div class="carousel-item">
-                        <img class="d-block w-100" src="img/chat2.jpg" alt="Second slide">
+                        <img class="d-block w-100" src="img-blog/chat2.jpg" alt="Second slide">
                     </div>
                     <div class="carousel-item">
-                        <img class="d-block w-100" src="img/chat3.jpg" alt="Third slide">
+                        <img class="d-block w-100" src="img-blog//chat3.jpg" alt="Third slide">
                     </div>
                     </div>
                         <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
@@ -73,9 +73,9 @@
                 <div class="row" id="imgProfil">
                     <div class="offset-md-3 col-md-6">
                         <img src="<?php if(isset($_SESSION['directory'])){
-                                        echo 'fichier/'.$_SESSION['directory'];
+                                        echo 'img-profil/'.$_SESSION['directory'];
                                     }else{
-                                       echo 'img/chat1.jpg'; 
+                                       echo 'img-blog/chat1.jpg'; 
                                     }?>">
 
                     </div>
@@ -91,13 +91,13 @@
 
          <div class="row">
             <div class="offset-md-4 col-md-4">
-                <form method="post" action="DAL/controller.php" enctype="multipart/form-data">
+                <form method="post" action="DAL/profilController.php" enctype="multipart/form-data">
                     <div class="form-group">
-                        <label for="exampleFormControlFile1" style="margin-left: 70px;">Modifier votre image pour votre profil</label>
-                        <input type="file" class="form-control-file" id="exampleFormControlFile1" name="file" style="margin-left: 70px;">
+                        <label style="margin-left: 70px;">Modifier votre image de profil</label>
+                        <input type="file" class="form-control-file" name="file" style="margin-left: 70px;">
                         <div class="row" id="btnValidImg">
                             <div class="offset-md-4 col-md-4">
-                                <button type="submit" class="btn btn-secondary" name="ok">Envoyer</button>
+                                <button type="submit" class="btn btn-secondary" name="img-profil">Envoyer</button>
                             </div>
                         </div>    
                     </div>

@@ -11,10 +11,8 @@
         $pseudoLog = $_POST['pseudoLog'];
         $passwordLog= $_POST['passwordLog'];
         verifAccess($pseudoLog,$passwordLog);
-    }else if ( isset($_POST['ok'])){
-        infoUpload();
     }else{
-        //header('Location: ../index.php');
+        header('Location: ../index.php');
     }
     
     //fonction qui r�cup�re les infos du user
@@ -78,26 +76,11 @@
         }
     }
     
-    //fonction pour récupérer et stocker l'upload
-    function infoUpload(){
-        $uploads_dir = '../fichier';
-        $tmp_name = $_FILES["file"]["tmp_name"];
-        $name = basename($_FILES["file"]["name"]);
-        move_uploaded_file($tmp_name, "$uploads_dir/$name");
-        
-        echo "$uploads_dir/$name";
-        session_start();
-        $_SESSION['directory']=$name;
-        
-        echo $_SESSION['directory'];
-        header('Location: ../accueil.php');
-    }
-    
     //fonction pour récupérer en base la password lié au pseudo
-    function selectByAKA($pseudo){
+    function selectByUser($pseudo, $email){
         $bdd=connectDB();
 
-        $passwordBDD = $bdd->query("SELECT password, pseudo, email FROM user WHERE pseudo='$pseudo'");
+        $passwordBDD = $bdd->query("SELECT password, pseudo, email FROM user WHERE pseudo='$pseudo' AND email= $email");
         while($donnee = $passwordBDD->fetch()){
             $result = $donnee;
         }
